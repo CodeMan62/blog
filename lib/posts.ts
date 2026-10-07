@@ -15,13 +15,33 @@ export type Post = {
 
 const postsDir = path.join(process.cwd(), "content", "posts");
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/blog";
+
+function withBasePath(href: string) {
+  if (
+    href.startsWith("http://") ||
+    href.startsWith("https://") ||
+    href.startsWith("//") ||
+    href.startsWith("data:")
+  ) {
+    return href;
+  }
+
+  if (href.startsWith("/")) {
+    return `${basePath}${href}`;
+  }
+
+  return href;
+}
+
 /** Render figures with a caption: ![alt](/path "Figure 1: something") */
 const renderer = {
   image({ href, title, text }: { href: string; title: string | null; text: string }) {
     const caption = title || text;
+    const imageSrc = withBasePath(href);
     return [
       `<figure>`,
-      `<img src="${href}" alt="${text}">`,
+      `<img src="${imageSrc}" alt="${text}">`,
       caption ? `<figcaption>${caption}</figcaption>` : "",
       `</figure>`,
     ]
