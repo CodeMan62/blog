@@ -1,0 +1,420 @@
+/* Design inspired by the "Inside NVIDIA GPUs" (matmul) post:
+   monospace type, white canvas, callouts, figures. Light mode only. */
+
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --body: #374151;
+  --muted: #6b7280;
+  --link: #2563eb;
+  --border: #e5e7eb;
+  --code-bg: #f8f9fa;
+  --code-border: #e9ecef;
+  --inline-code-bg: #f3f4f6;
+  --inline-code-fg: #b91c1c;
+  --accent-a: #3b82f6;
+  --accent-b: #8b5cf6;
+  --callout-info-bg: #e3f2fd;
+  --callout-info-border: #2196f3;
+  --callout-info-fg: #0d47a1;
+  --callout-note-bg: #f5f5f5;
+  --callout-note-border: #757575;
+  --callout-note-fg: #424242;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Fixed layer: reading progress bar ---------- */
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 100;
+  background: transparent;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+  transition: width 75ms linear;
+}
+
+/* ---------- Layout shell ---------- */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 6rem;
+}
+
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+
+.site-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.site-title a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+/* ---------- Home ---------- */
+
+.home-tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 3rem;
+  max-width: 60ch;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+
+.post-list {
+  list-style: none;
+}
+
+.post-item {
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-item:first-of-type {
+  border-top: 1px solid var(--border);
+}
+
+.post-item a {
+  display: block;
+  color: var(--fg);
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.post-item a:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.post-item time {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+/* ---------- Post ---------- */
+
+.post-back {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+}
+
+.post-back:hover {
+  color: var(--fg);
+}
+
+.post-header {
+  margin-bottom: 3rem;
+}
+
+.post-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  text-wrap: balance;
+}
+
+.post-subtitle {
+  color: var(--body);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.post-date {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.post-title-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 2.5rem;
+}
+
+/* ---------- Prose ---------- */
+
+.prose {
+  color: var(--body);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: 1.15rem;
+}
+
+.prose h2 {
+  color: var(--fg);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  letter-spacing: -0.01em;
+}
+
+.prose h3 {
+  color: var(--fg);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.35rem;
+}
+
+.prose li > ul {
+  margin-top: 0.35rem;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.prose a {
+  color: var(--link);
+}
+
+.prose strong {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85em;
+  background: var(--inline-code-bg);
+  color: var(--inline-code-fg);
+  border-radius: 3px;
+  padding: 0.15em 0.35em;
+}
+
+.prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 6px;
+  padding: 1em;
+  overflow-x: auto;
+  margin: 1.2rem 0;
+  line-height: 1.6;
+  font-size: 0.85rem;
+}
+
+.prose pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* ---------- Callouts (from markdown `> [!INFO]` / `> [!NOTE]`) ---------- */
+
+.callout {
+  margin: 1.4rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+  font-size: 0.95rem;
+}
+
+.callout > * + * {
+  margin-top: 0.5rem;
+}
+
+.callout p:last-child {
+  margin-bottom: 0.25rem;
+}
+
+.callout a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.callout.info {
+  background: var(--callout-info-bg);
+  border-left-color: var(--callout-info-border);
+  color: var(--callout-info-fg);
+}
+
+.callout.note {
+  background: var(--callout-note-bg);
+  border-left-color: var(--callout-note-border);
+  color: var(--callout-note-fg);
+}
+
+.callout.warn {
+  background: #fff3e0;
+  border-left-color: #ef6c00;
+  color: #a03d00;
+}
+
+/* ---------- Figures (markdown image with optional title caption) ---------- */
+
+.prose figure {
+  margin: 1.75rem 0;
+}
+
+.prose figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.prose figcaption {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Tables ---------- */
+
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  color: var(--fg);
+  font-weight: 700;
+  background: var(--code-bg);
+}
+
+/* ---------- Footer & 404 ---------- */
+
+.site-footer {
+  margin-top: 6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.not-found {
+  padding: 3rem 0;
+}
+
+.not-found h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.not-found p {
+  margin-bottom: 1rem;
+  color: var(--body);
+}
