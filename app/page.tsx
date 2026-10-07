@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
@@ -11,7 +12,7 @@ export default function Home() {
       <ul className="post-list">
         {posts.map((post) => (
           <li key={post.slug} className="post-item">
-            <a href={`/posts/${post.slug}`}>{post.title}</a>
+            <Link href={`/posts/${post.slug}`}>{post.title}</Link>
             <time dateTime={post.dateISO}>{post.dateDisplay}</time>
           </li>
         ))}

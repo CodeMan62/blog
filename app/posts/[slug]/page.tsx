@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPost } from "@/lib/posts";
@@ -41,9 +42,9 @@ export default async function PostPage({
   return (
     <article>
       <p>
-        <a href="/" className="post-back">
+        <Link href="/" className="post-back">
           ← Back to blog
-        </a>
+        </Link>
       </p>
 
       <header className="post-header">
