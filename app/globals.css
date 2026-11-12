@@ -20,6 +20,87 @@
   --callout-note-bg: #f5f5f5;
   --callout-note-border: #757575;
   --callout-note-fg: #424242;
+  --toggle-bg: #f3f4f6;
+  --toggle-fg: #374151;
+  --toggle-border: #d1d5db;
+  --toggle-thumb: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f0f;
+    --fg: #f3f4f6;
+    --body: #d1d5db;
+    --muted: #9ca3af;
+    --link: #60a5fa;
+    --border: #374151;
+    --code-bg: #1f1f1f;
+    --code-border: #374151;
+    --inline-code-bg: #27272a;
+    --inline-code-fg: #f87171;
+    --accent-a: #60a5fa;
+    --accent-b: #a78bfa;
+    --callout-info-bg: #1e3a5f;
+    --callout-info-border: #3b82f6;
+    --callout-info-fg: #93c5fd;
+    --callout-note-bg: #1f1f1f;
+    --callout-note-border: #757575;
+    --callout-note-fg: #d1d5db;
+    --toggle-bg: #27272a;
+    --toggle-fg: #d1d5db;
+    --toggle-border: #3f3f46;
+    --toggle-thumb: #18181b;
+  }
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #111111;
+  --body: #374151;
+  --muted: #6b7280;
+  --link: #2563eb;
+  --border: #e5e7eb;
+  --code-bg: #f8f9fa;
+  --code-border: #e9ecef;
+  --inline-code-bg: #f3f4f6;
+  --inline-code-fg: #b91c1c;
+  --accent-a: #3b82f6;
+  --accent-b: #8b5cf6;
+  --callout-info-bg: #e3f2fd;
+  --callout-info-border: #2196f3;
+  --callout-info-fg: #0d47a1;
+  --callout-note-bg: #f5f5f5;
+  --callout-note-border: #757575;
+  --callout-note-fg: #424242;
+  --toggle-bg: #f3f4f6;
+  --toggle-fg: #374151;
+  --toggle-border: #d1d5db;
+  --toggle-thumb: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f0f0f;
+  --fg: #f3f4f6;
+  --body: #d1d5db;
+  --muted: #9ca3af;
+  --link: #60a5fa;
+  --border: #374151;
+  --code-bg: #1f1f1f;
+  --code-border: #374151;
+  --inline-code-bg: #27272a;
+  --inline-code-fg: #f87171;
+  --accent-a: #60a5fa;
+  --accent-b: #a78bfa;
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #3b82f6;
+  --callout-info-fg: #93c5fd;
+  --callout-note-bg: #1f1f1f;
+  --callout-note-border: #757575;
+  --callout-note-fg: #d1d5db;
+  --toggle-bg: #27272a;
+  --toggle-fg: #d1d5db;
+  --toggle-border: #3f3f46;
+  --toggle-thumb: #18181b;
 }
 
 * {
@@ -29,7 +110,7 @@
 }
 
 html {
-  color-scheme: light;
+  color-scheme: light dark;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -105,6 +186,7 @@ a:hover {
 
 .site-nav {
   display: flex;
+  align-items: center;
   gap: 1.25rem;
   font-size: 0.9rem;
 }
@@ -117,6 +199,37 @@ a:hover {
 .site-nav a:hover {
   color: var(--fg);
   text-decoration: underline;
+}
+
+/* ---------- Dark mode toggle ---------- */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--toggle-border);
+  border-radius: 0.5rem;
+  background: var(--toggle-bg);
+  color: var(--toggle-fg);
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.theme-toggle:hover {
+  background: var(--toggle-border);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-a);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
 }
 
 /* ---------- Home ---------- */
